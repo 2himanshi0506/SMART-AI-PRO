@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interest Finder - Smart AI Assistant Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+</head>
+<body class="interest-page">
+    <!-- Animated Background -->
+    <div class="bg-gradient"></div>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h1 class="logo-text">AI Assistant</h1>
+        </div>
+        
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="{{ url_for('chat.chat') }}" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span class="nav-text">AI Chat</span>
+            </a>
+            <a href="{{ url_for('quiz.quiz') }}" class="nav-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span class="nav-text">Quiz</span>
+            </a>
+            <a href="{{ url_for('games.games') }}" class="nav-item">
+                <i class="fas fa-gamepad"></i>
+                <span class="nav-text">Games</span>
+            </a>
+            <a href="{{ url_for('timetable.timetable') }}" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span class="nav-text">Timetable</span>
+            </a>
+            <a href="{{ url_for('interest.interest_finder') }}" class="nav-item active">
+                <i class="fas fa-lightbulb"></i>
+                <span class="nav-text">Interest Finder</span>
+            </a>
+            <a href="{{ url_for('profile.profile') }}" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span class="nav-text">Profile</span>
+            </a>
+            <a href="{{ url_for('settings.settings') }}" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span class="nav-text">Settings</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="{{ url_for('logout') }}" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="nav-text">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-content">
+                <h1><i class="fas fa-lightbulb"></i> Interest Finder</h1>
+                <p>Discover your true potential with our AI-powered assessment</p>
+            </div>
+        </header>
+
+        <!-- Quiz Container -->
+        <div class="quiz-container">
+            <!-- Progress Bar -->
+            <div class="progress-section">
+                <div class="progress-info">
+                    <span>Question <span id="currentQuestion">1</span> of <span id="totalQuestions">8</span></span>
+                    <span id="progressPercent">12%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="question-card" id="questionCard">
+                <div class="question-header">
+                    <span class="question-number">Question <span id="qNumber">1</span></span>
+                    <span class="question-category" id="qCategory">Technology</span>
+                </div>
+                
+                <h2 class="question-text" id="questionText">Loading question...</h2>
+                
+                <div class="options-container" id="optionsContainer">
+                    <!-- Options will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="quiz-navigation">
+                <button class="quiz-btn prev-btn" id="prevBtn" disabled>
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Previous</span>
+                </button>
+                <button class="quiz-btn next-btn" id="nextBtn">
+                    <span>Next</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Welcome Screen (shown initially) -->
+        <div class="welcome-screen" id="welcomeScreen">
+            <div class="welcome-card">
+                <div class="welcome-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h2>Discover Your True Potential</h2>
+                <p>Our AI-powered Interest Finder will analyze your preferences and help you discover the perfect career path, skills, and interests.</p>
+                
+                <div class="features-list">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>8 Personalized Questions</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>AI-Powered Analysis</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Career Recommendations</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Skill Development Tips</span>
+                    </div>
+                </div>
+                
+                <button class="start-btn" id="startQuiz">
+                    <span>Start Assessment</span>
+                    <i class="fas fa-rocket"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+    
+</form>
+    <script src="{{ url_for('static', filename='js/interest_finder.js') }}"></script>
+</body>
+</html>

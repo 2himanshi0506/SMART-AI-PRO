@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Smart AI Assistant Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Quick fix for clickable elements */
+        .toggle-password {
+            z-index: 10;
+            pointer-events: auto !important;
+        }
+        .forgot-link {
+            z-index: 10;
+            position: relative;
+            pointer-events: auto !important;
+        }
+    </style>
+</head>
+<body class="auth-page">
+    <!-- Animated Background Orbs -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Logo Section -->
+            <div class="auth-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h1 class="logo-text">Smart AI Assistant Pro</h1>
+            </div>
+
+            <!-- Header Section -->
+            <div class="auth-header">
+                <h2>Welcome Back</h2>
+                <p>Sign in to continue your AI journey</p>
+            </div>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-message error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ messages[0] }}</span>
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Login Form -->
+            <form action="{{ url_for('auth.login') }}" method="POST" id="loginForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <!-- Username Field -->
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            class="input-field" 
+                            placeholder="Enter your username"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper" style="position: relative;">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="input-field" 
+                            placeholder="Enter your password"
+                            required
+                            style="padding-right: 50px;"
+                        >
+                        <!-- Password Toggle Button -->
+                        <button type="button" class="toggle-password" onclick="togglePassword('password')" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; padding: 5px;">
+                            <i class="fas fa-eye" id="eye-icon-password"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="form-extras">
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" name="remember">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-text">Remember me</span>
+                    </label>
+                <!-- Add this below the login form -->
+<form method="POST" action="{{ url_for('auth.login_post') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <!-- ... rest of form ... -->
+</form>
+
+<!-- Password field ke neeche add karein -->
+<div class="forgot-password-container" style="text-align: right; margin: 10px 0 15px 0;">
+    <a href="{{ url_for('auth.forgot_password') }}" class="forgot-link">
+        Forgot Password?
+    </a>
+</div>
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit">
+                    <span>Sign In</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <!-- Footer Link -->
+            <div class="auth-footer"><p>Don't have an account? <a href="{{ url_for('auth.signup') }}">Create Account</a></p>
+            </div>
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="card-glow"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Smart AI Assistant Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <!-- Animated Background -->
+    <div class="bg-gradient"></div>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h1 class="logo-text">AI Assistant</h1>
+        </div>
+        
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('dashboard') }}" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="{{ url_for('chat.chat') }}" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span class="nav-text">AI Chat</span>
+            </a>
+            <a href="{{ url_for('quiz.quiz') }}" class="nav-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span class="nav-text">Quiz</span>
+            </a>
+            <a href="{{ url_for('games.games') }}" class="nav-item">
+                <i class="fas fa-gamepad"></i>
+                <span class="nav-text">Games</span>
+            </a>
+            <a href="{{ url_for('timetable.timetable') }}" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span class="nav-text">Timetable</span>
+            </a>
+            <a href="{{ url_for('interest.interest_finder') }}" class="nav-item">
+                <i class="fas fa-lightbulb"></i>
+                <span class="nav-text">Interest Finder</span>
+            </a>
+            <a href="{{ url_for('profile.profile') }}" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span class="nav-text">Profile</span>
+            </a>
+            <a href="{{ url_for('settings.settings') }}" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span class="nav-text">Settings</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="{{ url_for('logout') }}" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="nav-text">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h2>Welcome Back, {{ current_user.username }}! 👋</h2>
+                <p>Your AI-powered productivity dashboard</p>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <div class="avatar">
+                        {{ current_user.username[0].upper() }}
+                    </div>
+                    <span class="user-name">{{ current_user.username }}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Cards Grid -->
+        <div class="dashboard-grid">
+            <!-- AI Chat Card -->
+            <div class="dashboard-card">
+                <div class="card-icon blue">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>AI Chat</h3>
+                <p>Chat with our intelligent AI assistant for answers, explanations, and creative help.</p>
+                <a href="{{ url_for('chat.chat') }}" class="card-btn gradient-blue">
+                    <span>Start Chatting</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Quiz Card -->
+            <div class="dashboard-card">
+                <div class="card-icon green">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3>Quiz</h3>
+                <p>Test your knowledge in various topics and track your progress over time.</p>
+                <a href="{{ url_for('quiz.quiz') }}" class="card-btn gradient-green">
+                    <span>Take Quiz</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Games Card -->
+            <div class="dashboard-card">
+                <div class="card-icon purple">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h3>Games</h3>
+                <p>Play fun and challenging games to sharpen your mind and relax.</p>
+                <a href="{{ url_for('games.games') }}" class="card-btn gradient-purple">
+                    <span>Play Games</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Timetable Card -->
+            <div class="dashboard-card">
+                <div class="card-icon yellow">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h3>Timetable</h3>
+                <p>Organize your tasks and schedule with our smart timetable manager.</p>
+                <a href="{{ url_for('timetable.timetable') }}" class="card-btn gradient-yellow">
+                    <span>Manage Tasks</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Interest Finder Card -->
+            <div class="dashboard-card featured">
+                <div class="featured-badge">✨ AI Powered</div>
+                <div class="card-icon indigo">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Interest Finder</h3>
+                <p>Discover your true potential with our AI-powered personality and interest assessment.</p>
+                <a href="{{ url_for('interest.interest_finder') }}" class="card-btn gradient-indigo">
+                    <span>Discover Yourself</span>
+                    <i class="fas fa-magic"></i>
+                </a>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="dashboard-card">
+                <div class="card-icon red">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h3>Profile</h3>
+                <p>View your stats, achievements, and personal progress dashboard.</p>
+                <a href="{{ url_for('profile.profile') }}" class="card-btn gradient-red">
+                    <span>View Profile</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Settings Card -->
+            <div class="dashboard-card">
+                <div class="card-icon gray">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <h3>Settings</h3>
+                <p>Customize your experience with theme, notifications, and preferences.</p>
+                <a href="{{ url_for('settings.settings') }}" class="card-btn gradient-gray">
+                    <span>Configure</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Stats Section -->
+        <div class="quick-stats">
+            <h3>Your Activity</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-comments stat-icon blue"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">{{ chat_count }}</span>
+                        <span class="stat-label">Chats</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clipboard-check stat-icon green"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">{{ quiz_count }}</span>
+                        <span class="stat-label">Quizzes</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-trophy stat-icon purple"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">{{ game_score }}</span>
+                        <span class="stat-label">Game Score</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-circle stat-icon yellow"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">{{ task_count }}</span>
+                        <span class="stat-label">Tasks Done</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

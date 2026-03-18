@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart AI Assistant Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-mode.css') }}">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-white dark:bg-gray-800 shadow-lg fixed h-full">
+            <div class="p-4 border-b">
+                <h1 class="text-xl font-bold text-blue-600">Smart AI Assistant Pro</h1>
+            </div>
+            <nav class="mt-4">
+                <a href="{{ url_for('dashboard') }}" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition">Dashboard</a>
+                <a href="{{ url_for('chat.chat') }}" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition">AI Chat</a>
+                <a href="{{ url_for('quiz.quiz') }}" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition">Quiz</a>
+                <a href="{{ url_for('games.games') }}" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition">Games</a>
+                <a href="{{ url_for('timetable.timetable') }}" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition">Timetable</a>
+                <a href="{{ url_for('profile.profile') }}" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition">Profile</a>
+                <a href="{{ url_for('settings.settings') }}" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition">Settings</a>
+            </nav>
+            <div class="absolute bottom-4 left-4">
+                <a href="{{ url_for('logout') }}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">Logout</a>
+            </div>
+        </div>
+        <!-- Main Content -->
+        <div class="flex-1 ml-64 p-6">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

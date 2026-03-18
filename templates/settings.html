@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Smart AI Assistant Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Theme-specific styles will be applied via CSS variables */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea, #764ba2);
+            --secondary-gradient: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            --success-gradient: linear-gradient(135deg, #22c55e, #16a34a);
+            --warning-gradient: linear-gradient(135deg, #f59e0b, #d97706);
+            --bg-primary: #0f0c29;
+            --bg-secondary: #1f2937;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --accent-blue: #60a5fa;
+            --accent-purple: #a78bfa;
+            --accent-green: #4ade80;
+            --accent-yellow: #fbbf24;
+            --accent-red: #f87171;
+        }
+
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(0, 0, 0, 0.03);
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --text-muted: #9ca3af;
+            --border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Blue Theme */
+        [data-theme="blue"] {
+            --primary-gradient: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            --secondary-gradient: linear-gradient(135deg, #60a5fa, #3b82f6);
+            --success-gradient: linear-gradient(135deg, #0ea5e9, #0284c7);
+            --warning-gradient: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            --bg-primary: #0c1929;
+            --bg-secondary: #1e3a5f;
+            --bg-card: rgba(59, 130, 246, 0.05);
+            --accent-blue: #60a5fa;
+            --accent-purple: #818cf8;
+            --accent-green: #34d399;
+            --accent-yellow: #fcd34d;
+            --accent-red: #f87171;
+        }
+
+        /* Purple Theme */
+        [data-theme="purple"] {
+            --primary-gradient: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            --secondary-gradient: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            --success-gradient: linear-gradient(135deg, #a855f7, #9333ea);
+            --warning-gradient: linear-gradient(135deg, #c084fc, #a855f7);
+            --bg-primary: #1e1b4b;
+            --bg-secondary: #312e81;
+            --bg-card: rgba(139, 92, 246, 0.05);
+            --accent-blue: #818cf8;
+            --accent-purple: #a78bfa;
+            --accent-green: #a78bfa;
+            --accent-yellow: #fcd34d;
+            --accent-red: #f87171;
+        }
+
+        .theme-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-card.active {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+        }
+
+        .theme-card.active::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-blue);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .theme-preview {
+            width: 100%;
+            height: 80px;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .theme-preview.dark {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        }
+
+        .theme-preview.light {
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+        }
+
+        .theme-preview.blue {
+            background: linear-gradient(135deg, #0c1929, #1e3a5f, #1e40af);
+        }
+
+        .theme-preview.purple {
+            background: linear-gradient(135deg, #1e1b4b, #312e81, #4c1d95);
+        }
+
+        .theme-name {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .settings-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .settings-card:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 5px 20px rgba(96, 165, 250, 0.1);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 32px;
+            cursor: pointer;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            height: 24px;
+            width: 24px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background: var(--primary-gradient);
+        }
+
+        .toggle-switch input:checked + .toggle-slider::before {
+            transform: translateX(28px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .card-icon.blue {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(29, 78, 216, 0.2));
+            color: var(--accent-blue);
+        }
+
+        .card-icon.green {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.2));
+            color: var(--accent-green);
+        }
+
+        .card-icon.yellow {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+            color: var(--accent-yellow);
+        }
+
+        .card-icon.purple {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.2));
+            color: var(--accent-purple);
+        }
+
+        .card-icon.red {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2));
+            color: var(--accent-red);
+        }
+
+        .card-title {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+
+        .toggle-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .action-btn {
+            padding: 1rem 2rem;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .action-btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .action-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .flash-message {
+            padding: 1rem 1.5rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            color: var(--accent-green);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .password-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body class="settings-page" data-theme="{{ current_user.theme_preference if current_user.theme_preference else 'dark' }}">
+    <!-- Animated Background -->
+    <div class="bg-gradient"></div>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h1 class="logo-text">AI Assistant</h1>
+        </div>
+        
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="{{ url_for('chat.chat') }}" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span class="nav-text">AI Chat</span>
+            </a>
+            <a href="{{ url_for('quiz.quiz') }}" class="nav-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span class="nav-text">Quiz</span>
+            </a>
+            <a href="{{ url_for('games.games') }}" class="nav-item">
+                <i class="fas fa-gamepad"></i>
+                <span class="nav-text">Games</span>
+            </a>
+            <a href="{{ url_for('timetable.timetable') }}" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span class="nav-text">Timetable</span>
+            </a>
+            <a href="{{ url_for('interest.interest_finder') }}" class="nav-item">
+                <i class="fas fa-lightbulb"></i>
+                <span class="nav-text">Interest Finder</span>
+            </a>
+            <a href="{{ url_for('profile.profile') }}" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span class="nav-text">Profile</span>
+            </a>
+            <a href="{{ url_for('settings.settings') }}" class="nav-item active">
+                <i class="fas fa-cog"></i>
+                <span class="nav-text">Settings</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="{{ url_for('logout') }}" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="nav-text">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <p>Manage your account and preferences</p>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <div class="avatar">
+                        {{ current_user.username[0].upper() }}
+                    </div>
+                    <span class="user-name">{{ current_user.username }}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message">
+                        <i class="fas fa-check-circle"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Password Section -->
+        <div class="password-form">
+            <div class="card-header" style="margin-bottom: 1.5rem;">
+                <div class="card-icon red">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div>
+                    <h3 class="card-title">Change Password</h3>
+                    <p class="card-description">Update your account password</p>
+                </div>
+            </div>
+            
+            <form method="POST" action="{{ url_for('settings.update_password') }}">
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <input type="password" name="password" class="form-input" placeholder="Enter new password" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" name="confirm_password" class="form-input" placeholder="Confirm new password" required>
+                </div>
+                <button type="submit" class="action-btn">
+                    <i class="fas fa-save"></i>
+                    <span>Update Password</span>
+                </button>
+            </form>
+        </div>
+
+               <!-- Theme Settings -->
+        <h3 style="color: var(--text-primary); margin-bottom: 1.5rem;">
+            <i class="fas fa-palette" style="color: var(--accent-purple);"></i> Theme Settings
+        </h3>
+        
+        <div class="dashboard-grid" style="margin-bottom: 2rem;">
+            <!-- Dark Theme -->
+            <div class="theme-card active" data-theme="dark" onclick="selectTheme('dark')">
+                <div class="theme-preview dark"></div>
+                <span class="theme-name">🌙 Dark</span>
+            </div>
+            
+            <!-- Light Theme -->
+            <div class="theme-card" data-theme="light" onclick="selectTheme('light')">
+                <div class="theme-preview light"></div>
+                <span class="theme-name">☀️ Light</span>
+            </div>
+            
+            <!-- Blue Theme -->
+            <div class="theme-card" data-theme="blue" onclick="selectTheme('blue')">
+                <div class="theme-preview blue"></div>
+                <span class="theme-name">🌊 Blue</span>
+            </div>
+            
+            <!-- Purple Theme -->
+            <div class="theme-card" data-theme="purple" onclick="selectTheme('purple')">
+                <div class="theme-preview purple"></div>
+                <span class="theme-name">✨ Purple</span>
+            </div>
+        </div>
+        
+        <!-- Toggle Dark/Light Button -->
+        <div style="margin-bottom: 2rem;">
+            <button class="action-btn secondary" onclick="toggleDarkLight()">
+                <i class="fas fa-moon"></i>
+                <span>Toggle Dark/Light Mode</span>
+            </button>
+        </div>
+
+        <!-- Account Settings -->
+        <h3 style="color: var(--text-primary); margin-bottom: 1.5rem;">
+            <i class="fas fa-user-cog" style="color: var(--accent-blue);"></i> Account Settings
+        </h3>
+        
+        <div class="dashboard-grid">
+            <!-- Email Notifications -->
+            <div class="settings-card" onclick="toggleSetting('email_notifications', this)">
+                <div class="card-header">
+                    <div class="card-icon blue">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h3 class="card-title">Email Notifications</h3>
+                        <p class="card-description">Receive email updates</p>
+                    </div>
+                </div>
+                <div class="toggle-container">
+                    <span class="toggle-label">Enable email notifications</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="email_notifications" {% if current_user.email_notifications %}checked{% endif %}>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Push Notifications -->
+            <div class="settings-card" onclick="toggleSetting('push_notifications', this)">
+                <div class="card-header">
+                    <div class="card-icon green">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div>
+                        <h3 class="card-title">Push Notifications</h3>
+                        <p class="card-description">Receive push alerts</p>
+                    </div>
+                </div>
+                <div class="toggle-container">
+                    <span class="toggle-label">Enable push notifications</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="push_notifications" {% if current_user.push_notifications %}checked{% endif %}>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Activity Log -->
+            <div class="settings-card" onclick="toggleSetting('activity_log', this)">
+                <div class="card-header">
+                    <div class="card-icon yellow">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div>
+                        <h3 class="card-title">Activity Log</h3>
+                        <p class="card-description">Track account activity</p>
+                    </div>
+                </div>
+                <div class="toggle-container">
+                    <span class="toggle-label">Enable activity tracking</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="activity_log" {% if current_user.activity_log %}checked{% endif %}>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Two-Factor Authentication -->
+            <div class="settings-card" onclick="toggleSetting('two_factor', this)">
+                <div class="card-header">
+                    <div class="card-icon purple">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <h3 class="card-title">Two-Factor Authentication</h3>
+                        <p class="card-description">Enhanced security</p>
+                    </div>
+                </div>
+                <div class="toggle-container">
+                    <span class="toggle-label">Enable 2FA</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="two_factor" {% if current_user.two_factor %}checked{% endif %}>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+       <h3 style="color: var(--text-primary); margin: 2rem 0 1.5rem;">
+    <i class="fas fa-clock" style="color: var(--accent-yellow);"></i> Recent Activity
+    
+    <!-- Download Button Add Karein -->
+    <a href="{{ url_for('settings.download_activity_log') }}" 
+       style="float: right; padding: 0.5rem 1rem; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; color: white; text-decoration: none; font-size: 0.85rem; font-weight: 500;">
+        <i class="fas fa-download"></i> Download CSV
+    </a>
+</h3><ard-card">
+            <div id="activity-list">
+                {% if activities %}
+                    {% for activity in activities %}
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 12px; margin-bottom: 0.5rem;">
+                        <div class="card-icon {% if activity.action == 'theme_changed' %}purple{% elif activity.action == 'password_updated' %}red{% elif activity.action == 'notification_changed' %}blue{% else %}green{% endif %}" style="width: 40px; height: 40px; font-size: 1rem;">
+                            <i class="fas {% if activity.action == 'theme_changed' %}fa-palette{% elif activity.action == 'password_updated' %}fa-lock{% elif activity.action == 'notification_changed' %}fa-bell{% else %}fa-cog{% endif %}"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <p style="color: var(--text-primary); margin: 0; font-weight: 500;">{{ activity.description }}</p>
+                            <p style="color: var(--text-muted); margin: 0.25rem 0 0; font-size: 0.85rem;">{{ activity.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        <i class="fas fa-history" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p>No recent activity</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = document.body.getAttribute('data-theme') || 'dark';
+            applyTheme(savedTheme);
+        });
+
+        // Theme selection function
+        function selectTheme(theme) {
+            // Update UI
+            document.querySelectorAll('.theme-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
+            
+            // Apply theme
+            applyTheme(theme);
+            
+            // Save to server
+            saveThemePreference(theme);
+        }
+
+        // Apply theme to body
+        function applyTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('selectedTheme', theme);
+        }
+
+        // Toggle Dark/Light Mode
+        function toggleDarkLight() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            selectTheme(newTheme);
+        }
+
+        // Save theme preference to server
+        async function saveThemePreference(theme) {
+            try {
+                const response = await fetch('/update_settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        setting_type: 'theme',
+                        value: theme
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('Theme saved successfully');
+                }
+            } catch (error) {
+                console.error('Error saving theme:', error);
+            }
+        }
+
+        // Toggle setting function
+        async function toggleSetting(settingId, cardElement) {
+            const checkbox = document.getElementById(settingId);
+            const newValue = checkbox.checked;
+            
+            // Visual feedback
+            cardElement.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                cardElement.style.transform = 'scale(1)';
+            }, 150);
+            
+            // Save to server
+            try {
+                const response = await fetch('/update_settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        setting_type: settingId,
+                        value: newValue
+                    })
+                });
+                
+                if (response.ok) {
+                    // Add activity log entry
+                    addActivityLog(settingId, newValue);
+                } else {
+                    // Revert checkbox if failed
+                    checkbox.checked = !newValue;
+                    alert('Failed to update setting. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error updating setting:', error);
+                checkbox.checked = !newValue;
+            }
+        }
+
+        // Add activity log entry
+        async function addActivityLog(action, value) {
+            try {
+                const response = await fetch('/add_activity', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: action,
+                        value: value
+                    })
+                });
+                
+                if (response.ok) {
+                    // Reload activity list
+                    loadActivityLog();
+                }
+            } catch (error) {
+                console.error('Error adding activity:', error);
+            }
+        }
+
+        // Load activity log
+        async function loadActivityLog() {
+            try {
+                const response = await fetch('/get_activities');
+                const activities = await response.json();
+                
+                const activityList = document.getElementById('activity-list');
+                
+                if (activities.length === 0) {
+                    activityList.innerHTML = `
+                        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                            <i class="fas fa-history" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <p>No recent activity</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                activities.forEach(activity => {
+                    const iconClass = getActivityIcon(activity.action);
+                    const iconColor = getActivityColor(activity.action);
+                    
+                    html += `
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 12px; margin-bottom: 0.5rem;">
+                            <div class="card-icon ${iconColor}" style="width: 40px; height: 40px; font-size: 1rem;">
+                                <i class="fas ${iconClass}"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="color: var(--text-primary); margin: 0; font-weight: 500;">${activity.description}</p>
+                                <p style="color: var(--text-muted); margin: 0.25rem 0 0; font-size: 0.85rem;">${activity.timestamp}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                activityList.innerHTML = html;
+            } catch (error) {
+                console.error('Error loading activities:', error);
+            }
+        }
+
+        // Get activity icon based on action
+        function getActivityIcon(action) {
+            const icons = {
+                'theme_changed': 'fa-palette',
+                'password_updated': 'fa-lock',
+                'notification_changed': 'fa-bell',
+                'two_factor': 'fa-shield-alt',
+                'email_notifications': 'fa-envelope',
+                'push_notifications': 'fa-mobile-alt',
+                'activity_log': 'fa-history'
+            };
+            return icons[action] || 'fa-cog';
+        }
+
+        // Get activity color based on action
+        function getActivityColor(action) {
+            const colors = {
+                'theme_changed': 'purple',
+                'password_updated': 'red',
+                'notification_changed': 'blue',
+                'two_factor': 'purple',
+                'email_notifications': 'blue',
+                'push_notifications': 'green',
+                'activity_log': 'yellow'
+            };
+            return colors[action] || 'green';
+        }
+
+        // Load activity log on page load
+        document.addEventListener('DOMContentLoaded', loadActivityLog);
+    </script>
+</body>
+</html>

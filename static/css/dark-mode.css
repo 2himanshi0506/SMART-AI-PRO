@@ -1,0 +1,41 @@
+/* Dark mode toggle styles */
+.dark {
+    background-color: #111827;
+    color: #f9fafb;
+}
+
+.dark .bg-white {
+    background-color: #1f2937;
+}
+
+.dark .text-gray-900 {
+    color: #f9fafb;
+}
+
+.dark .border {
+    border-color: #4b5563;
+}
+
+.dark input, .dark select {
+    background-color: #374151;
+    color: #f9fafb;
+    border-color: #4b5563;
+}
+
+.dark button {
+    background-color: #3b82f6;
+}
+
+.dark button:hover {
+    background-color: #2563eb;
+}
+
+/* Specific overrides for components */
+.dark .chat-area {
+    background-color: #1f2937;
+}
+
+.dark .quiz-container, .dark .game-section {
+    background-color: #1f2937;
+    color: #f9fafb;
+}

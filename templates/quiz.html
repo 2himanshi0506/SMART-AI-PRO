@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Smart AI Assistant Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="quiz-page">
+    <!-- Animated Background -->
+    <div class="bg-gradient"></div>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h1 class="logo-text">AI Assistant</h1>
+        </div>
+        
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="{{ url_for('chat.chat') }}" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span class="nav-text">AI Chat</span>
+            </a>
+            <a href="{{ url_for('quiz.quiz') }}" class="nav-item active">
+                <i class="fas fa-clipboard-list"></i>
+                <span class="nav-text">Quiz</span>
+            </a>
+            <a href="{{ url_for('games.games') }}" class="nav-item">
+                <i class="fas fa-gamepad"></i>
+                <span class="nav-text">Games</span>
+            </a>
+            <a href="{{ url_for('timetable.timetable') }}" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span class="nav-text">Timetable</span>
+            </a>
+            <a href="{{ url_for('interest.interest_finder') }}" class="nav-item">
+                <i class="fas fa-lightbulb"></i>
+                <span class="nav-text">Interest Finder</span>
+            </a>
+            <a href="{{ url_for('profile.profile') }}" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span class="nav-text">Profile</span>
+            </a>
+            <a href="{{ url_for('settings.settings') }}" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span class="nav-text">Settings</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="{{ url_for('logout') }}" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="nav-text">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h2>Quiz Challenge! 🎯</h2>
+                <p>Test your knowledge and boost your skills</p>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <div class="avatar">
+                        {{ current_user.username[0].upper() }}
+                    </div>
+                    <span class="user-name">{{ current_user.username }}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Quiz Stats Grid -->
+        <div class="quick-stats">
+            <h3>Your Quiz Performance</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-clipboard-list stat-icon blue"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">{{ total_quizzes }}</span>
+                        <span class="stat-label">Total Quizzes</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-trophy stat-icon green"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">{{ highest_score }}%</span>
+                        <span class="stat-label">Highest Score</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-chart-line stat-icon purple"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">{{ average_score }}%</span>
+                        <span class="stat-label">Average Score</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-fire stat-icon orange"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">{{ streak }}</span>
+                        <span class="stat-label">Day Streak</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Categories Grid -->
+        <h3 style="margin-bottom: 1rem; color: white;">Choose Your Category</h3>
+        <div class="dashboard-grid">
+            <!-- Programming -->
+            <div class="dashboard-card">
+                <div class="card-icon blue">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3>Programming</h3>
+                <p>Master coding concepts, algorithms, and problem-solving skills</p>
+                <div class="category-meta" style="margin-bottom: 1rem; color: rgba(255,255,255,0.6); font-size: 0.85rem;">
+                    <span><i class="fas fa-question-circle"></i> 50 Questions</span>
+                    <span><i class="fas fa-clock" style="margin-left: 10px;"></i> 30 min</span>
+                </div>
+                <a href="#" class="card-btn gradient-blue" onclick="startQuiz('programming')">
+                    <span>Start Quiz</span>
+                    <i class="fas fa-play"></i>
+                </a>
+            </div>
+
+            <!-- Web Development -->
+            <div class="dashboard-card">
+                <div class="card-icon green">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h3>Web Development</h3>
+                <p>HTML, CSS, JavaScript, and modern web technologies</p>
+                <div class="category-meta" style="margin-bottom: 1rem; color: rgba(255,255,255,0.6); font-size: 0.85rem;">
+                    <span><i class="fas fa-question-circle"></i> 45 Questions</span>
+                    <span><i class="fas fa-clock" style="margin-left: 10px;"></i> 25 min</span>
+                </div>
+                <a href="#" class="card-btn gradient-green" onclick="startQuiz('webdev')">
+                    <span>Start Quiz</span>
+                    <i class="fas fa-play"></i>
+                </a>
+            </div>
+
+            <!-- DSA -->
+            <div class="dashboard-card">
+                <div class="card-icon purple">
+                    <i class="fas fa-cubes"></i>
+                </div>
+                <h3>DSA</h3>
+                <p>Data Structures and Algorithms for efficient coding</p>
+                <div class="category-meta" style="margin-bottom: 1rem; color: rgba(255,255,255,0.6); font-size: 0.85rem;">
+                    <span><i class="fas fa-question-circle"></i> 40 Questions</span>
+                    <span><i class="fas fa-clock" style="margin-left: 10px;"></i> 35 min</span>
+                </div>
+                <a href="#" class="card-btn gradient-purple" onclick="startQuiz('dsa')">
+                    <span>Start Quiz</span>
+                    <i class="fas fa-play"></i>
+                </a>
+            </div>
+
+            <!-- Cyber Security -->
+            <div class="dashboard-card">
+                <div class="card-icon red">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Cyber Security</h3>
+                <p>Network security, ethical hacking, and protection techniques</p>
+                <div class="category-meta" style="margin-bottom: 1rem; color: rgba(255,255,255,0.6); font-size: 0.85rem;">
+                    <span><i class="fas fa-question-circle"></i> 35 Questions</span>
+                    <span><i class="fas fa-clock" style="margin-left: 10px;"></i> 25 min</span>
+                </div>
+                <a href="#" class="card-btn gradient-red" onclick="startQuiz('cybersecurity')">
+                    <span>Start Quiz</span>
+                    <i class="fas fa-play"></i>
+                </a>
+            </div>
+
+            <!-- OS & Networking -->
+            <div class="dashboard-card">
+                <div class="card-icon yellow">
+                    <i class="fas fa-server"></i>
+                </div>
+                <h3>OS & Networking</h3>
+                <p>Operating systems, networks, and infrastructure basics</p>
+                <div class="category-meta" style="margin-bottom: 1rem; color: rgba(255,255,255,0.6); font-size: 0.85rem;">
+                    <span><i class="fas fa-question-circle"></i> 30 Questions</span>
+                    <span><i class="fas fa-clock" style="margin-left: 10px;"></i> 20 min</span>
+                </div>
+                <a href="#" class="card-btn gradient-yellow" onclick="startQuiz('osnetworking')">
+                    <span>Start Quiz</span>
+                    <i class="fas fa-play"></i>
+                </a>
+            </div>
+
+            <!-- AI & ML -->
+            <div class="dashboard-card featured">
+                <div class="featured-badge">🧠 AI Powered</div>
+                <div class="card-icon indigo">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>AI & Machine Learning</h3>
+                <p>Artificial Intelligence and Machine Learning fundamentals</p>
+                <div class="category-meta" style="margin-bottom: 1rem; color: rgba(255,255,255,0.6); font-size: 0.85rem;">
+                    <span><i class="fas fa-question-circle"></i> 40 Questions</span>
+                    <span><i class="fas fa-clock" style="margin-left: 10px;"></i> 30 min</span>
+                </div>
+                <a href="#" class="card-btn gradient-indigo" onclick="startQuiz('aiml')">
+                    <span>Start Quiz</span>
+                    <i class="fas fa-magic"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Leaderboard Section -->
+        <div class="quick-stats" style="margin-top: 2rem;">
+            <h3>Top Performers</h3>
+            <div class="leaderboard-card" style="background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.5rem;">
+                <div class="leaderboard-header" style="display: grid; grid-template-columns: 80px 2fr 1fr 1fr; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 1rem; font-weight: 600; color: rgba(255,255,255,0.7);">
+                    <span>Rank</span>
+                    <span>User</span>
+                    <span>Score</span>
+                    <span>Accuracy</span>
+                </div>
+                <div class="leaderboard-item" style="display: grid; grid-template-columns: 80px 2fr 1fr 1fr; padding: 1rem; align-items: center; border-radius: 12px; margin-bottom: 0.5rem;"></div>
+                    <span class="rank gold" style="color: #fbbf24; font-weight: 700;"><i class="fas fa-crown"></i> 1</span>
+                    <div class="user-info" style="display: flex; align-items: center; gap: 12px;">
+                        <div class="user-avatar" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700;">A</div>
+                        <span>Alex Johnson</span>
+                    </div>
+                    <span style="font-weight: 600; color: #a5b4fc;">98%</span>
+                    <span style="font-weight: 600; color: #a5b4fc;">99%</span>
+                </div>
+                <div class="leaderboard-item" style="display: grid; grid-template-columns: 80px 2fr 1fr 1fr; padding: 1rem; align-items: center; border-radius: 12px; margin-bottom: 0.5rem;">
+                    <span class="rank silver" style="color: #9ca3af; font-weight: 700;">2</span>
+                    <div class="user-info" style="display: flex; align-items: center; gap: 12px;">
+                        <div class="user-avatar" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700;">S</div>
+                        <span>Sarah Chen</span>
+                    </div>
+                    <span style="font-weight: 600; color: #a5b4fc;">95%</span>
+                    <span style="font-weight: 600; color: #a5b4fc;">97%</span>
+                </div>
+                <div class="leaderboard-item" style="display: grid; grid-template-columns: 80px 2fr 1fr 1fr; padding: 1rem; align-items: center; border-radius: 12px; margin-bottom: 0.5rem;">
+                    <span class="rank bronze" style="color: #f97316; font-weight: 700;">3</span>
+                    <div class="user-info" style="display: flex; align-items: center; gap: 12px;">
+                        <div class="user-avatar" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700;">M</div>
+                        <span>Mike Brown</span>
+                    </div>
+                    <span style="font-weight: 600; color: #a5b4fc;">92%</span>
+                    <span style="font-weight: 600; color: #a5b4fc;">95%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gamification Section -->
+        <div class="quick-stats" style="margin-top: 2rem;">
+            <h3>Your Achievements</h3>
+            <div class="stats-grid">
+                <div class="stat-card" style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.25rem;">
+                    <div class="level-badge" style="width: 60px; height: 60px; background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                        <i class="fas fa-crown" style="color: white;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" style="font-size: 1.25rem; font-weight: 700;">Pro Learner</span>
+                        <span class="stat-label">Level 5</span>
+                    </div>
+                </div>
+                <div class="stat-card" style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.25rem;">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(245,158,11,0.2)); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-star" style="font-size: 1.5rem; color: #fbbf24;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" style="font-size: 1.25rem; font-weight: 700;">650 / 1000</span>
+                        <span class="stat-label">XP Progress</span>
+                    </div>
+                </div>
+                <div class="stat-card" style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.25rem;">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(124,58,237,0.2)); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-medal" style="font-size: 1.5rem; color: #a78bfa;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" style="font-size: 1.25rem; font-weight: 700;">12</span>
+                        <span class="stat-label">Badges Earned</span>
+                    </div>
+                </div>
+                <div class="stat-card" style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.25rem;">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, rgba(34,197,94,0.2), rgba(22,163,74,0.2)); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-fire" style="font-size: 1.5rem; color: #4ade80;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" style="font-size: 1.25rem; font-weight: 700;">7 Days</span>
+                        <span class="stat-label">Current Streak</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+</body>
+</html>

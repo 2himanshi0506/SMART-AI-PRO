@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Smart AI Assistant Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Quick fix for clickable elements */
+        .toggle-password {
+            z-index: 10;
+            pointer-events: auto !important;
+        }
+        .btn-submit {
+            pointer-events: auto !important;
+            opacity: 1 !important;
+        }
+    </style>
+</head>
+<body class="auth-page">
+    <!-- Animated Background Orbs -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Logo Section -->
+            <div class="auth-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h1 class="logo-text">Smart AI Assistant Pro</h1>
+            </div>
+
+            <!-- Header Section -->
+            <div class="auth-header">
+                <h2>Create Account</h2>
+                <p>Join the future of AI-powered assistance</p>
+            </div>
+
+            <!-- Sign Up Form -->
+            <form action="{{ url_for('auth.signup') }}" method="POST" id="signupForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <!-- Username Field -->
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            class="input-field" 
+                            placeholder="Choose a username"
+                            required
+                            minlength="3"
+                        >
+                    </div>
+                </div>
+
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="input-field" 
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper" style="position: relative;">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="input-field" 
+                            placeholder="Create a password"
+                            required
+                            minlength="6"
+                            style="padding-right: 50px;"
+                        >
+                        <!-- Password Toggle Button -->
+                        <button type="button" class="toggle-password" onclick="togglePassword('password')" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; padding: 5px;">
+                            <i class="fas fa-eye" id="eye-icon-password"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength">
+                        <div class="strength-bar" id="strengthBar"></div>
+                    </div>
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <div class="input-wrapper" style="position: relative;">
+                        <input 
+                            type="password" 
+                            id="confirm_password" 
+                            name="confirm_password" 
+                            class="input-field" 
+                            placeholder="Confirm your password"
+                            required
+                            style="padding-right: 50px;"
+                        >
+                        <!-- Password Toggle Button -->
+                        <button type="button" class="toggle-password" onclick="togglePassword('confirm_password')" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; padding: 5px;">
+                            <i class="fas fa-eye" id="eye-icon-confirm_password"></i>
+                        </button>
+                    </div>
+                    <!-- Password Match Indicators -->
+                    <div class="password-match" id="passwordMatch" style="display: none; align-items: center; gap: 6px; font-size: 0.8rem; margin-top: 8px; color: #86efac;">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Passwords match</span>
+                    </div>
+                    <div class="password-mismatch" id="passwordMismatch" style="display: none; align-items: center; gap: 6px; font-size: 0.8rem; margin-top: 8px; color: #fca5a5;">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Passwords do not match</span>
+                    </div>
+                </div>
+
+                <!-- Terms Checkbox -->
+                <div class="form-extras">
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" name="terms" required>
+                        <span class="checkmark"></span>
+                        <span class="checkbox-text">I agree to the <a href="#" style="color: #a5b4fc;">Terms & Conditions</a></span>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <span>Create Account</span>
+                    <i class="fas fa-user-plus"></i>
+                </button>
+            </form>
+
+            <!-- Footer Link -->
+            <div class="auth-footer">
+                <p>Already have an account? <a href="{{ url_for('auth.login') }}">Sign In</a></p>
+            </div>
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="card-glow"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>

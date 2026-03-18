@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat History - Smart AI Assistant Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .history-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        .history-item:hover {
+            background: rgba(255,255,255,0.05);
+            transform: translateX(5px);
+        }
+        .history-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .history-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .history-content {
+            flex: 1;
+        }
+        .history-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+        .history-text {
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+        }
+        .history-time {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .divider {
+            height: 1px;
+            background: rgba(255,255,255,0.05);
+            margin: 1rem 0;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+    </style>
+</head>
+<body class="history-page">
+    <!-- Animated Background -->
+    <div class="bg-gradient"></div>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h1 class="logo-text">AI Assistant</h1>
+        </div>
+        
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="{{ url_for('chat.chat') }}" class="nav-item active">
+                <i class="fas fa-comments"></i>
+                <span class="nav-text">AI Chat</span>
+            </a>
+            <a href="{{ url_for('quiz.quiz') }}" class="nav-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span class="nav-text">Quiz</span>
+            </a>
+            <a href="{{ url_for('games.games') }}" class="nav-item">
+                <i class="fas fa-gamepad"></i>
+                <span class="nav-text">Games</span>
+            </a>
+            <a href="{{ url_for('timetable.timetable') }}" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span class="nav-text">Timetable</span>
+            </a>
+            <a href="{{ url_for('interest.interest_finder') }}" class="nav-item">
+                <i class="fas fa-lightbulb"></i>
+                <span class="nav-text">Interest Finder</span>
+            </a>
+            <a href="{{ url_for('profile.profile') }}" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span class="nav-text">Profile</span>
+            </a>
+            <a href="{{ url_for('settings.settings') }}" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span class="nav-text">Settings</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="{{ url_for('logout') }}" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="nav-text">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h2>📜 Chat History</h2>
+                <p>View your past conversations with AI</p>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <div class="avatar">
+                        {{ current_user.username[0].upper() }}
+                    </div>
+                    <span class="user-name">{{ current_user.username }}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- History Stats -->
+        <div class="stats-grid" style="margin-bottom: 2rem;">
+            <div class="stat-card">
+                <i class="fas fa-comments stat-icon blue"></i>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalChats">0</span>
+                    <span class="stat-label">Total Chats</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-calendar stat-icon purple"></i>
+                <div class="stat-info">
+                    <span class="stat-value" id="todayChats">0</span>
+                    <span class="stat-label">Today</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-clock stat-icon yellow"></i>
+                <div class="stat-info">
+                    <span class="stat-value" id="weekChats">0</span>
+                    <span class="stat-label">This Week</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-message stat-icon green"></i>
+                <div class="stat-info">
+                    <span class="stat-value" id="avgChats">0</span>
+                    <span class="stat-label">Avg/Day</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- History List -->
+        <div class="dashboard-card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(37,99,235,0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-history" style="color: #60a5fa; font-size: 1.25rem;"></i>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; color: white; font-size: 1.25rem; font-weight: 600;">Your Conversations</h3>
+                        <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">All time</span>
+                    </div>
+                </div>
+                <button onclick="loadHistory()" style="padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; cursor: pointer;">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+            
+            <div id="history-list">
+                <!-- History items will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Load history on page load
+        async function loadHistory() {
+            const list = document.getElementById('history-list');
+            list.innerHTML = '<div style="text-align: center; padding: 2rem;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #667eea;"></i></div>';
+            
+            try {
+                const response = await fetch('/chat/history');
+                const history = await response.json();
+                
+                if (history.length === 0) {
+                    list.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-comments" style="font-size: 4rem; color: rgba(255,255,255,0.2); margin-bottom: 1rem;"></i>
+                            <h3 style="color: white; margin-bottom: 0.5rem;">No Chat History</h3>
+                            <p style="color: rgba(255,255,255,0.5);">Start a conversation with AI to see your history here!</p>
+                            <a href="{{ url_for('chat.chat') }}" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; color: white; text-decoration: none;">
+                                <i class="fas fa-plus"></i> Start Chatting
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Update stats
+                document.getElementById('totalChats').textContent = history.length;
+                
+                let html = '';
+                history.forEach((item, index) => {
+                    html += `
+                        <div class="history-item">
+                            <div class="history-message">
+                                <div class="history-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                                    <i class="fas fa-user" style="color: white;"></i>
+                                </div>
+                                <div class="history-content">
+                                    <div class="history-label" style="color: #a5b4fc;">You</div>
+                                    <div class="history-text">${item.message}</div>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="history-message">
+                                <div class="history-icon" style="background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(124,58,237,0.2));">
+                                    <i class="fas fa-robot" style="color: #a78bfa;"></i>
+                                </div>
+                                <div class="history-content">
+                                    <div class="history-label" style="color: #a78bfa;">AI Assistant</div>
+                                    <div class="history-text">${item.response}</div>
+                                </div>
+                            </div>
+                            <div class="history-time">
+                                <i class="fas fa-clock"></i>
+                                <span>${item.time}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                list.innerHTML = html;
+            } catch (error) {
+                list.innerHTML = '<p style="color: #f87171; text-align: center; padding: 2rem;">Error loading history. Please try again.</p>';
+            }
+        }
+        
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', loadHistory);
+    </script>
+</body>
+</html>

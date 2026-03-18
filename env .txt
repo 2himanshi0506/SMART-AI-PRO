@@ -1,0 +1,1 @@
+GEMINI_API_KEY=client = AIzaSyB7gdbDYjPffpPtgsQTBtQetKbdmJf1f04
