@@ -1,14 +1,26 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
-*.pyo
+*.py[codz]
+*$py.class
 
-# Virtual Environment
-.venv/
-env/
+# C extensions
+*.so
 
-# Environment variables
+# Distribution / packaging
+.Python
+build/
+dist/
+eggs/
+*.egg-info/
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Environments
 .env
+.venv
+env/
 
 # VS Code
 .vscode/
